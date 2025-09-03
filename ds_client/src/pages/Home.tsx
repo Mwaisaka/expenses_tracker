@@ -30,7 +30,7 @@ export default function Home() {
           </Link>
           <Link
             to="/register"
-            className="bg-gray-200 text-blue-700 px-6 py-3 rounded-lg shadow-md hover:bg-gray-300 transition"
+            className="bg-green-700 text-white px-6 py-3 rounded-lg shadow-md hover:bg-green-600 transition"
           >
             Register
           </Link>
