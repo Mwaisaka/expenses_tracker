@@ -53,7 +53,7 @@ export default function Login() {
             Login
           </button>
         </form>
-        <div className="mt-4 text-sm text-center">
+        <div className="mt-4 text-md text-center">
           <p>
             Forgot your password?{" "}
             <a href="/reset-password" className="text-blue-600 hover:underline">
@@ -61,7 +61,7 @@ export default function Login() {
             </a>
           </p>
           <p className="mt-2">
-            Don't have an account?{" "}
+            Are you new here?{" "}
             <a href="/register" className="text-blue-600 hover:underline">
               Register
             </a>

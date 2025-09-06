@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
 interface User {
   username: string;
@@ -9,7 +15,11 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   login: (username: string, password: string) => Promise<void>;
-  register: (username: string, email: string, password: string) => Promise<void>;
+  register: (
+    username: string,
+    email: string,
+    password: string
+  ) => Promise<void>;
   logout: () => void;
 }
 
@@ -18,6 +28,10 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
+
+  // Dummy credentials
+  const DUMMY_USER: User = { username: "testuser", email: "test@example.com" };
+  const DUMMY_PASSWORD = "123456";
 
   // Load stored user and token on page reload
   useEffect(() => {
@@ -41,35 +55,53 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [user, token]);
 
   // 🔹 Login
+  // const login = async (username: string, password: string) => {
+  //   try {
+  //     const res = await fetch("http://127.0.0.1:8000/api/token/", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ username, password }),
+  //     });
+
+  //     if (!res.ok) throw new Error("Login failed");
+
+  //     const data = await res.json();
+  //     setToken(data.access);
+
+  //     // (Optional) Fetch user profile
+  //     const profileRes = await fetch("http://127.0.0.1:8000/api/profile/", {
+  //       headers: { Authorization: `Bearer ${data.access}` },
+  //     });
+
+  //     if (!profileRes.ok) throw new Error("Failed to fetch profile");
+
+  //     const profileData = await profileRes.json();
+  //     setUser(profileData);
+  //   } catch (error) {
+  //     throw new Error("Login failed. Check your credentials.");
+  //   }
+  // };
+
+  // 🔹 Dummy Login
   const login = async (username: string, password: string) => {
-    try {
-      const res = await fetch("http://127.0.0.1:8000/api/token/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (!res.ok) throw new Error("Login failed");
-
-      const data = await res.json();
-      setToken(data.access);
-
-      // (Optional) Fetch user profile
-      const profileRes = await fetch("http://127.0.0.1:8000/api/profile/", {
-        headers: { Authorization: `Bearer ${data.access}` },
-      });
-
-      if (!profileRes.ok) throw new Error("Failed to fetch profile");
-
-      const profileData = await profileRes.json();
-      setUser(profileData);
-    } catch (error) {
-      throw new Error("Login failed. Check your credentials.");
-    }
+    return new Promise<void>((resolve, reject) => {
+      if (username === DUMMY_USER.username && password === DUMMY_PASSWORD) {
+        setUser(DUMMY_USER);
+        setToken("dummy-token-123"); // fake token
+        resolve();
+        alert("User logged in successfully.");
+      } else {
+        reject(new Error("Invalid username or password"));
+      }
+    });
   };
 
   // 🔹 Register
-  const register = async (username: string, email: string, password: string) => {
+  const register = async (
+    username: string,
+    email: string,
+    password: string
+  ) => {
     try {
       const res = await fetch("http://127.0.0.1:8000/api/register/", {
         method: "POST",
@@ -85,10 +117,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // 🔹 Logout
   const logout = () => {
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
+    const confirmLogout = window.confirm("Are you sure you want to log out?");
+    if (confirmLogout) {
+      setUser(null);
+      setToken(null);
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+      alert("User logged out successfully.");
+    }
   };
 
   return (
