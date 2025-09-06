@@ -3,12 +3,12 @@ import { Outlet } from "react-router-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout.tsx";
 import Home from "./pages/Home";
-// import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/Dashboard.tsx";
 // import Expenses from "./pages/Expenses";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
-// import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute.tsx";
 
 function App() {
   return (
@@ -17,14 +17,14 @@ function App() {
         {/* Layout wrapper */}
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          {/* <Route
+          <Route
             path="dashboard"
             element={
               <ProtectedRoute>
                 <Dashboard />
               </ProtectedRoute>
             }
-          /> */}
+          />
           {/* <Route
             path="expenses"
             element={

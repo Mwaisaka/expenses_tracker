@@ -34,9 +34,9 @@ export default function Navbar() {
               <Link to="/dashboard" className="hover:text-gray-200 hover:underline">
                 Dashboard
               </Link>
-              <Link to="/expenses" className="hover:text-gray-200 hover:underline">
+              {/* <Link to="/expenses" className="hover:text-gray-200 hover:underline">
                 Expenses
-              </Link>
+              </Link> */}
               <button
                 onClick={logout}
                 className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md"
@@ -75,13 +75,13 @@ export default function Navbar() {
               >
                 Dashboard
               </Link>
-              <Link
+              {/* <Link
                 to="/expenses"
                 className="hover:text-gray-200 hover:underline"
                 onClick={() => setIsOpen(false)}
               >
                 Expenses
-              </Link>
+              </Link> */}
               <button
                 onClick={() => {
                   logout();
