@@ -45,7 +45,7 @@ export default function Sidebar({
           {sidebarOpen && <span>Dashboard</span>}
         </button>
 
-        <button
+        {/* <button
           onClick={() => setActiveMenu("add")}
           className={`flex items-center gap-2 p-2 rounded w-full text-left ${
             activeMenu === "add" ? "bg-blue-600" : "hover:bg-blue-600"
@@ -53,12 +53,12 @@ export default function Sidebar({
         >
           <PlusCircle size={20} />
           {sidebarOpen && <span>Add Expense</span>}
-        </button>
+        </button> */}
 
         <button
-          onClick={() => setActiveMenu("list")}
+          onClick={() => setActiveMenu("Expenses List")}
           className={`flex items-center gap-2 p-2 rounded w-full text-left ${
-            activeMenu === "list" ? "bg-blue-600" : "hover:bg-blue-600"
+            activeMenu === "Expenses List" ? "bg-blue-600" : "hover:bg-blue-600"
           }`}
         >
           <List size={20} />

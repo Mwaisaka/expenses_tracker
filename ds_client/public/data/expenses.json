@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "description": "Groceries",
+    "amount": 45.75,
+    "category": "Food",
+    "date": "2025-09-01"
+  },
+  {
+    "id": 2,
+    "description": "Electricity Bill",
+    "amount": 120.0,
+    "category": "Utilities",
+    "date": "2025-09-05"
+  },
+  {
+    "id": 3,
+    "description": "Internet Subscription",
+    "amount": 50.0,
+    "category": "Utilities",
+    "date": "2025-08-28"
+  },
+  {
+    "id": 4,
+    "description": "Movie Tickets",
+    "amount": 25.5,
+    "category": "Entertainment",
+    "date": "2025-08-25"
+  },
+  {
+    "id": 5,
+    "description": "Coffee",
+    "amount": 4.25,
+    "category": "Food",
+    "date": "2025-08-24"
+  },
+  {
+    "id": 6,
+    "description": "Salaries",
+    "amount": 101.25,
+    "category": "Miscelleneous",
+    "date": "2025-08-24"
+  }
+]

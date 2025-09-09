@@ -30,7 +30,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
 
   // Dummy credentials
-  const DUMMY_USER: User = { username: "testuser", email: "test@example.com" };
+  const DUMMY_USER: User = { username: "mwaisaka", email: "test@example.com" };
   const DUMMY_PASSWORD = "123456";
 
   // Load stored user and token on page reload
