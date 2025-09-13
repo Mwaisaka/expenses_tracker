@@ -26,7 +26,7 @@ export default function DashboardHome({ expenses, total }: DashboardHomeProps) {
         title="This Month"
         value={`$${expenses
           .filter((e) => new Date(e.date).getMonth() === new Date().getMonth())
-          .reduce((acc, exp) => acc + exp.amount, 0)
+          .reduce((acc, exp) => acc + Number(exp.amount), 0)
           .toFixed(2)}`}
         color="text-green-600"
       />

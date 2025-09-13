@@ -48,9 +48,9 @@ export default function ExpenseList({ expenses = [] }: ExpenseProps) {
     const expenseYear = expenseDate.getFullYear().toString();
     return (
       (exp.description.toLowerCase().includes(search) ||
-      exp.amount.toString().includes(search) ||
-      exp.category.toLowerCase().includes(search) ||
-      new Date(exp.date).toLocaleDateString().includes(search))&&
+        exp.amount.toString().includes(search) ||
+        exp.category.toLowerCase().includes(search) ||
+        new Date(exp.date).toLocaleDateString().includes(search)) &&
       (selectedMonth === "" || selectedMonth === expenseMonth) &&
       (selectedYear === "" || selectedYear === expenseYear)
     );
@@ -165,7 +165,7 @@ export default function ExpenseList({ expenses = [] }: ExpenseProps) {
               />
             </th>
             <th className="p-2 border">Description</th>
-            <th className="p-2 border">Amount</th>
+            <th className="p-2 border">Amount (Kes)</th>
             <th className="p-2 border">Category</th>
             <th className="p-2 border">Date</th>
           </tr>
@@ -182,7 +182,13 @@ export default function ExpenseList({ expenses = [] }: ExpenseProps) {
                   />
                 </td>
                 <td className="p-2 border">{exp.description}</td>
-                <td className="p-2 text-red-500 border">-${exp.amount}</td>
+                <td className="p-2 text-red-500 border">
+                  {" "}
+                  {Number(exp.amount).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </td>
                 <td className="p-2 border">{exp.category}</td>
                 <td className="p-2 border">
                   {new Date(exp.date).toLocaleDateString()}

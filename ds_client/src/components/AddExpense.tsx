@@ -13,14 +13,14 @@ export default function AddExpense({ onClose }: AddExpenseProps) {
     date: "",
   });
 
-  const categories = [
-    "Food",
-    "Transport",
-    "Entertainment",
-    "Shopping",
-    "Bills",
-    "Other",
-  ];
+  // const categories = [
+  //   "Food",
+  //   "Transport",
+  //   "Entertainment",
+  //   "Shopping",
+  //   "Bills",
+  //   "Other",
+  // ];
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
