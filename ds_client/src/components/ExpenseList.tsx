@@ -11,9 +11,10 @@ interface Expense {
 
 interface ExpenseProps {
   expenses: Expense[];
+  onExpenseAdded?: (expense: Expense) => void;
 }
 
-export default function ExpenseList({ expenses = [] }: ExpenseProps) {
+export default function ExpenseList({ expenses = [], onExpenseAdded }: ExpenseProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
@@ -214,7 +215,7 @@ export default function ExpenseList({ expenses = [] }: ExpenseProps) {
             >
               ✕
             </button>
-            <AddExpense onClose={() => setShowModal(false)} />
+            <AddExpense onClose={() => setShowModal(false)}  onExpenseAdded={onExpenseAdded}/>
           </div>
         </div>
       )}

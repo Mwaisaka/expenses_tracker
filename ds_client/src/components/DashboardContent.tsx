@@ -16,18 +16,22 @@ interface DashboardContentProps {
   activeMenu: string;
   expenses: Expense[];
   total: number;
+  onExpenseAdded?: (expense: any) => void; // new callback
 }
 
 export default function DashboardContent({
   activeMenu,
   expenses,
   total,
+  onExpenseAdded,
 }: DashboardContentProps) {
   // Render based on activeMenu
   if (activeMenu === "dashboard")
     return <DashboardHome expenses={expenses} total={total} />;
-  if (activeMenu === "add") return <AddExpense />;
-  if (activeMenu === "Expenses List") return <ExpenseList expenses={expenses}/>;
+  if (activeMenu === "add")
+    return <AddExpense onExpenseAdded={onExpenseAdded} />;
+  if (activeMenu === "Expenses List")
+    return <ExpenseList expenses={expenses} onExpenseAdded={onExpenseAdded} />;
   if (activeMenu === "reports") return <Reports />;
 
   return null;

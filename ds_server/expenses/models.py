@@ -8,7 +8,7 @@ class Expense(models.Model):
         ("Food", "Food"),
         ("Transport", "Transport"),
         ("Entertainment", "Entertainment"),
-        ("Shopping", "Food"),
+        ("Shopping", "Shopping"),
         ("Bills", "Bills"),
         ("Others", "Others"),
     ]

@@ -39,10 +39,15 @@ export default function Dashboard() {
     };
 
     fetchExpenses();
-  }, [token]);
+  }, []);
 
   // derive total directly so it is always in sync
   const total = expenses.reduce((acc, exp) => acc + Number(exp.amount), 0);
+
+  const handleExpenseAdded = (newExpense: Expense) => {
+    // Update list without re-fetching
+    setExpenses((prev) => [newExpense, ...prev]);
+  };
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -67,6 +72,7 @@ export default function Dashboard() {
           activeMenu={activeMenu}
           expenses={expenses}
           total={total}
+          onExpenseAdded={handleExpenseAdded}
         />
       </div>
     </div>
