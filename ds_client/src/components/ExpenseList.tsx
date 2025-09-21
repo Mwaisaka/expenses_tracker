@@ -11,7 +11,7 @@ interface Expense {
 
 interface ExpenseProps {
   expenses: Expense[];
-  onExpenseAdded?: (expense: Expense) => void;
+  onExpenseAdded?: (expense: Expense | null) => void;
 }
 
 export default function ExpenseList({
@@ -95,7 +95,7 @@ export default function ExpenseList({
         setSelectedIds([]);
         //Refresh expenses list
         if (onExpenseAdded) {
-          onExpenseAdded(null as any); // trigger parent refresh
+          onExpenseAdded(null); // trigger parent refresh
         }
       } catch (err) {
         alert("Error in deleting expense(s):" + err);

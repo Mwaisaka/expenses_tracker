@@ -19,33 +19,33 @@ export default function Dashboard() {
   const [activeMenu, setActiveMenu] = useState("dashboard");
   const [expenses, setExpenses] = useState<Expense[]>([]);
 
+  const fetchExpenses = async () => {
+    try {
+      const res = await fetch("http://127.0.0.1:8000/expenses_list/", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error("Failed to fetch expenses");
+
+      const data: Expense[] = await res.json();
+      setExpenses(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
-    if (!token) return;
-
-    console.log("Token :" + token);
-
-    const fetchExpenses = async () => {
-      try {
-        const res = await fetch("http://127.0.0.1:8000/expenses_list/", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (!res.ok) throw new Error("Failed to fetch expenses");
-
-        const data: Expense[] = await res.json();
-        setExpenses(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchExpenses();
-  }, []);
+    if (token) fetchExpenses();
+  }, [token]);
 
   // derive total directly so it is always in sync
   const total = expenses.reduce((acc, exp) => acc + Number(exp.amount), 0);
 
   const handleExpenseAdded = (newExpense: Expense | null) => {
-    if (!newExpense) return; // ignore nulls from delete
+    if (!newExpense) {
+      // Refresh on delete
+      fetchExpenses();
+      return;
+    } // ignore nulls from delete
 
     setExpenses((prev) => [newExpense, ...prev]); // Update list without re-fetching
   };
