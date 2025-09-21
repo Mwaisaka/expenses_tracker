@@ -16,7 +16,7 @@ interface DashboardContentProps {
   activeMenu: string;
   expenses: Expense[];
   total: number;
-  onExpenseAdded?: (expense: any) => void; // new callback
+  onExpenseAdded?: (expense: Expense | null) => void; // new callback
 }
 
 export default function DashboardContent({

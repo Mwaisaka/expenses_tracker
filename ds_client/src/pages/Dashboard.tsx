@@ -6,7 +6,7 @@ import DashboardContent from "../components/DashboardContent.tsx";
 interface Expense {
   id: number;
   description: string;
-  amount: number ;
+  amount: number;
   category: string;
   date: string;
 }
@@ -22,7 +22,7 @@ export default function Dashboard() {
   useEffect(() => {
     if (!token) return;
 
-    console.log("Token :"+token)
+    console.log("Token :" + token);
 
     const fetchExpenses = async () => {
       try {
@@ -44,9 +44,10 @@ export default function Dashboard() {
   // derive total directly so it is always in sync
   const total = expenses.reduce((acc, exp) => acc + Number(exp.amount), 0);
 
-  const handleExpenseAdded = (newExpense: Expense) => {
-    // Update list without re-fetching
-    setExpenses((prev) => [newExpense, ...prev]);
+  const handleExpenseAdded = (newExpense: Expense | null) => {
+    if (!newExpense) return; // ignore nulls from delete
+
+    setExpenses((prev) => [newExpense, ...prev]); // Update list without re-fetching
   };
 
   return (

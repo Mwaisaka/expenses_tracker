@@ -14,7 +14,10 @@ interface ExpenseProps {
   onExpenseAdded?: (expense: Expense) => void;
 }
 
-export default function ExpenseList({ expenses = [], onExpenseAdded }: ExpenseProps) {
+export default function ExpenseList({
+  expenses = [],
+  onExpenseAdded,
+}: ExpenseProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
@@ -58,14 +61,49 @@ export default function ExpenseList({ expenses = [], onExpenseAdded }: ExpensePr
   });
 
   //Handle Delete
-  const handleDelete = () => {
+  const handleDelete = async () => {
+    if (selectedIds.length === 0) {
+      alert("Please select atleast one expense to delete.");
+      return;
+    }
+    //Ask the user for confirmation
     const confirmDelete = window.confirm(
-      `Are you sure you want to delete the selected item(s)?`
+      `Are you sure you want to delete ${selectedIds.length} expense(s)?`
     );
     if (confirmDelete) {
-      alert("Item(s) deleted successfully.");
-      // Here you would make an API call to delete
-      setSelectedIds([]);
+      //Proceed to delete the tenant
+      try {
+        for (const id of selectedIds) {
+          const response = await fetch(
+            `http://127.0.0.1:8000/expense_detail/${id}`,
+            {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`, // add auth
+              },
+            }
+          );
+          if (!response.ok) {
+            alert(`Failed to delete expense with id ${id}`);
+            throw new Error(
+              `Failed to delete selected item(s): ${response.statusText}`
+            );
+          }
+        }
+        alert("Selected expenses(s) deleted successfully.");
+
+        setSelectedIds([]);
+        //Refresh expenses list
+        if (onExpenseAdded) {
+          onExpenseAdded(null as any); // trigger parent refresh
+        }
+      } catch (err) {
+        alert("Error in deleting expense(s):" + err);
+      }
+    } else {
+      //Do noting and retain the expense list
+      alert("Selected expense(s) not deleted!");
+      return;
     }
   };
 
@@ -215,7 +253,10 @@ export default function ExpenseList({ expenses = [], onExpenseAdded }: ExpensePr
             >
               ✕
             </button>
-            <AddExpense onClose={() => setShowModal(false)}  onExpenseAdded={onExpenseAdded}/>
+            <AddExpense
+              onClose={() => setShowModal(false)}
+              onExpenseAdded={onExpenseAdded}
+            />
           </div>
         </div>
       )}
