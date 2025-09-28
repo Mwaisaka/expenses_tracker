@@ -63,6 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       const data = await res.json();
       setToken(data.access);
+      console.log(data.access);
 
       // (Optional) Fetch user profile
       const profileRes = await fetch("http://127.0.0.1:8000/profile/", {
