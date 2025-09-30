@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics, permissions, status
 from .models import Report
-from .serializers import ReportSerializer
+from .serializers import ReportSerializer, ExpenseSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from datetime import datetime
@@ -12,6 +12,14 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from celery.result import AsyncResult
 from django.conf import settings
+
+import io
+from django.http import HttpResponse
+from reportlab.lib.pagesizes import A4
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+from openpyxl import Workbook
 
 class ReportListView(generics.ListAPIView):
     serializer_class = ReportSerializer
@@ -104,7 +112,7 @@ class GenerateReportView(APIView):
 def generate_reports_now(request):
     """Trigger Celery task manually"""
     task = generate_monthly_reports.delay()
-    return Response({"message": "Report generation started","task_id": task.id})
+    return Response({"message": "Report generation started","task_id": task.id}, status=status.HTTP_202_ACCEPTED)
 
 @api_view(["GET"])
 def check_task_status(request, task_id):
@@ -114,3 +122,139 @@ def check_task_status(request, task_id):
         "status": result.status,
         "result": result.result if result.ready() else None
     })
+
+class ExpenseStatementView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        start_date = request.query_params.get("start_date")
+        end_date = request.query_params.get("end_date")
+        
+        if not start_date or not end_date:
+            return Response({"error": "Please provide both start_date and end_date in format YYYY-MM-DD"}, 
+                            status=status.HTTP_400_BAD_REQUEST,)
+        
+        expenses = Expense.objects.filter(user=request.user, date__range=[start_date, end_date])
+        
+        serializer = ExpenseSerializer(expenses, many=True)
+        
+        total_amount = expenses.aggregate(total=Sum("amount"))["total"] or 0
+        
+        data = {
+            "user" : request.user.username,
+            "start_date": start_date,
+            "end_date": end_date,
+            "total_amount": total_amount,
+            "expenses": serializer.data,
+        }
+        
+        return Response(data, status = status.HTTP_200_OK)
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def generate_statement(request):
+    """
+    Generate expense statement for a given date range.
+    Supports JSON (default), PDF, and Excel output.
+    """    
+    user=request.user
+    start_date = request.data.get("start_date")
+    end_date = request.data.get("end_date")
+    output_format = request.data.get("format","json") # json|pdf|excel
+    
+    if not start_date or not end_date:
+        return Response(
+            {"error": "Please provide start_date and end_date (YYYY-MM-DD)."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    
+    try:
+        start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
+        end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
+    except ValueError:
+        return Response({"error": "Invalid date format. Use YYYY-MM-DD."}, status=400)
+    
+    expenses = Expense.objects.filter(
+        user=user, date__gte=start_date, date__lte=end_date
+    ).order_by("date")
+    
+    total_amount = sum(e.amount for e in expenses)
+    
+    # 1. JSON response
+    if output_format == "json":
+        serializer = ExpenseSerializer(expenses, many = True)
+        
+        return Response(
+            {
+                "user": user.username,
+                "start_date": start_date,
+                "end_date": end_date,
+                "total_amount": total_amount,
+                "expenses": serializer.data,
+            }
+        )
+    
+     # 2. PDF response
+    if output_format == "pdf":
+        buffer = io.BytesIO()
+        doc = SimpleDocTemplate(buffer, pagesize=A4)
+        styles = getSampleStyleSheet()
+        elements = []
+
+        elements.append(Paragraph(f"Expense Statement for {user.username}", styles["Title"]))
+        elements.append(Paragraph(f"Period: {start_date} to {end_date}", styles["Normal"]))
+        elements.append(Spacer(1, 12))
+        
+        #Table data
+        data = [["Date", "Description", "Category", "Amount", "Entry Date"]]
+        for exp in expenses:
+            data.append([
+                str(exp.date),
+                exp.description,
+                exp.category,
+                f"{exp.amount:.2f}",
+                exp.created_at.strftime("%Y-%m-%d %H:%M"),
+            ])
+        data.append(["", "", "Total", f"{total_amount:.2f}", ""])
+        
+        table = Table(data, hAlign="LEFT")
+        table.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
+            ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
+            ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+            ("GRID", (0, 0), (-1, -1), 1, colors.black),
+            ("BACKGROUND", (0, 1), (-1, -1), colors.beige),
+        ]))
+        elements.append(table)
+
+        doc.build(elements)
+        buffer.seek(0)
+
+        response = HttpResponse(buffer, content_type="application/pdf")
+        response["Content-Disposition"] = f'attachment; filename="statement_{start_date}_{end_date}.pdf"'
+        return response
+     # 3. Excel response
+    if output_format == "excel":
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "Statement"
+
+        ws.append(["Date", "Description", "Category", "Amount", "Entry Date"])
+        for exp in expenses:
+            ws.append([
+                exp.date,
+                exp.description,
+                exp.category,
+                float(exp.amount),
+                exp.created_at.strftime("%Y-%m-%d %H:%M"),
+            ])
+        ws.append(["", "", "Total", float(total_amount), ""])
+
+        response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        response["Content-Disposition"] = f'attachment; filename="statement_{start_date}_{end_date}.xlsx"'
+        wb.save(response)
+        return response
+
+    return Response({"error": "Invalid format. Use json, pdf, or excel."}, status=400)
+    
+    
