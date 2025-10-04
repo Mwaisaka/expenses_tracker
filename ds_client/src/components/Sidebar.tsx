@@ -1,5 +1,11 @@
 import React from "react";
-import { LayoutDashboard, PlusCircle, List, PieChart, LogOut } from "lucide-react";
+import {
+  LayoutDashboard,
+  PlusCircle,
+  List,
+  PieChart,
+  LogOut,
+} from "lucide-react";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -63,6 +69,18 @@ export default function Sidebar({
         >
           <List size={20} />
           {sidebarOpen && <span>Expenses List</span>}
+        </button>
+
+        <button
+          onClick={() => setActiveMenu("Expenses Statement")}
+          className={`flex items-center gap-2 p-2 rounded w-full text-left ${
+            activeMenu === "Expenses Statement"
+              ? "bg-blue-600"
+              : "hover:bg-blue-600"
+          }`}
+        >
+          <List size={20} />
+          {sidebarOpen && <span>Statement</span>}
         </button>
 
         <button

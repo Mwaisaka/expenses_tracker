@@ -3,6 +3,7 @@ import Reports from "./Reports";
 import ExpenseList from "./ExpenseList";
 import AddExpense from "./AddExpense";
 import DashboardHome from "./DashboardHome";
+import Statement from "./Statement"
 
 interface Expense {
   id: number;
@@ -33,6 +34,7 @@ export default function DashboardContent({
   if (activeMenu === "Expenses List")
     return <ExpenseList expenses={expenses} onExpenseAdded={onExpenseAdded} />;
   if (activeMenu === "reports") return <Reports />;
+  if(activeMenu === "Expenses Statement") return <Statement />
 
   return null;
 }
