@@ -75,7 +75,7 @@ export default function ExpenseList({
       try {
         for (const id of selectedIds) {
           const response = await fetch(
-            `http://127.0.0.1:8000/expense_detail/${id}`,
+            `http://127.0.0.1:8000/expense_detail/${id}/`,
             {
               method: "DELETE",
               headers: {
