@@ -18,16 +18,16 @@ export default function DashboardHome({ expenses, total }: DashboardHomeProps) {
     <main className="flex-1 max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-3 gap-6">
       <Card
         title="Total Expenses"
-        value={`$${total.toFixed(2)}`}
+        value={`Kes. ${total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
         color="text-blue-600"
       />
 
       <Card
         title="This Month"
-        value={`$${expenses
+        value={`Kes. ${expenses
           .filter((e) => new Date(e.date).getMonth() === new Date().getMonth())
           .reduce((acc, exp) => acc + Number(exp.amount), 0)
-          .toFixed(2)}`}
+          .toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
         color="text-green-600"
       />
 
@@ -36,11 +36,11 @@ export default function DashboardHome({ expenses, total }: DashboardHomeProps) {
         value={
           expenses.length > 0
             ? Object.entries(
-                expenses.reduce((acc, exp) => {
-                  acc[exp.category] = (acc[exp.category] || 0) + exp.amount;
-                  return acc;
-                }, {} as Record<string, number>)
-              ).sort((a, b) => b[1] - a[1])[0][0]
+              expenses.reduce((acc, exp) => {
+                acc[exp.category] = (acc[exp.category] || 0) + exp.amount;
+                return acc;
+              }, {} as Record<string, number>)
+            ).sort((a, b) => b[1] - a[1])[0][0]
             : "N/A"
         }
         color="text-purple-600"
@@ -60,7 +60,7 @@ export default function DashboardHome({ expenses, total }: DashboardHomeProps) {
                     {exp.description} ({exp.category})
                   </span>
                   <span className="font-semibold text-red-500">
-                    -${exp.amount}
+                    -Kes. {Number(exp.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </li>
               ))
