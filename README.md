@@ -8,6 +8,7 @@ Expenses Tracker App is an application designed to help one manage their income,
 - **Add/Edit/Delete Expenses**: Expenses List Module.
 - **View Expenses Statement**: Statement Module.
 - **Download Expenses Statement**: Download Expenses Statement over a given period in PDF or Excel formats.
+- **View Expenses Reports**: View Expenses Reports over a given period in a Pie Chart, Bar Chart or Tabular outputs.
 
 ## Tech Stack
 
