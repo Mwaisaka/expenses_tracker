@@ -212,22 +212,53 @@ export default function ReportsDashboard() {
         {/*Bar Chart*/}
         <div className="bg-white shadow rounded-xl p-4">
           <h2 className="font=-bold mb-">Monthly Expenses Trend</h2>
-          {reports.length>0? (
+          {reports.length > 0 ? (
             <BarChart width={400} height={300} data={reports.slice(0, 6).reverse()}>
-              <CartesianGrid strokeDasharray="3 3"/>
-              <XAxis dataKey="month"/>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" />
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="total_expenses" fill="#0088FE"/>
+              <Bar dataKey="total_expenses" fill="#0088FE" />
             </BarChart>
-          ):(
+          ) : (
             <p className="text-gray-500">No data available</p>
           )}
         </div>
       </div>
       {/*Reports Table section*/}
-      
+      <div className="bg-white shadow rounded-xl p-4">
+        <h2 className="font-bold mb-4">All Reports</h2>
+        {loading ? (
+          <p>Loading...</p>
+        ) : reports.length === 0 ? (
+          <p className="text-gray-500">No Reports found. </p>
+        ) : (
+          <table className="w-full border text-sm">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="border p-1">Month</th>
+                <th className="border p-1">Year</th>
+                <th className="border p-1">Total (Kes)</th>
+                <th className="border p-1">Generated At</th>
+              </tr>
+            </thead>
+            <tbody>
+              {reports.map((r) => (
+                <tr key={r.id} className="border-t">
+                  <td className="border p-1 text-center">{r.month}</td>
+                  <td className="border p-1 text-center">{r.year}</td>
+                  <td className="border p-1 text-blue-600 font-semibold text-center">{Number(r.total_expenses).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                  })}</td>
+                  <td className="border p-1 text-center">{new Date(r.created_at).toLocaleString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+
       {/* Statement Generator */}
       <div className="bg-white shadow rounded-xl p-4">
         <StatementGenerator />

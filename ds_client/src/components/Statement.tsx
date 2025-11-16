@@ -47,7 +47,8 @@ export default function Statement() {
             setLoading(false)
         }
     };
-    return (<div className="max-w-xl mx-auto p-6 bg-white shadow-md rounded-xl mt-4"><h2 className="text-2xl font-bold mb-4">Expenses Statement</h2>
+    return (<div className="max-w-xl mx-auto p-6 bg-white shadow-md rounded-xl mt-4 w-full">
+        <h2 className="text-2xl font-bold mb-4">Expenses Statement</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
             <div>
                 <label className="block font-medium">Start Date</label>

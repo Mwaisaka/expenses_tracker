@@ -5,7 +5,7 @@ export default function Home() {
   const { user } = useAuth();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 text-center px-4">
+    <div className="flex flex-col items-center justify-center min-h-screen text-center px-4 bg-gradient-to-r from-gray-50 to-gray-300 rounded-xl">
       <h1 className="text-4xl md:text-5xl font-bold mb-6 text-blue-700">
         Welcome to Expenses Tracker
       </h1>
