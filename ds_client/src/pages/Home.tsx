@@ -28,12 +28,12 @@ export default function Home() {
           >
             Login
           </Link>
-          <Link
+          {/* <Link
             to="/register"
             className="bg-green-700 text-white px-6 py-3 rounded-lg shadow-md hover:bg-green-600 transition"
           >
             Register
-          </Link>
+          </Link> */}
         </div>
       )}
     </div>
