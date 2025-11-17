@@ -84,6 +84,15 @@ export default function Sidebar({
         </button>
 
         <button
+          onClick={() => setActiveMenu("generate_reports")}
+          className={`flex items-center gap-2 p-2 rounded w-full text-left ${
+            activeMenu === "generate_reports" ? "bg-blue-600" : "hover:bg-blue-600"
+          }`}
+        >
+          <PieChart size={20} />
+          {sidebarOpen && <span>Generate Reports</span>}
+        </button>
+        <button
           onClick={() => setActiveMenu("reports")}
           className={`flex items-center gap-2 p-2 rounded w-full text-left ${
             activeMenu === "reports" ? "bg-blue-600" : "hover:bg-blue-600"
