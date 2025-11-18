@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
-from celery.schedules import crontab
+# from celery.schedules import crontab
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -146,13 +146,13 @@ REST_FRAMEWORK = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
 
-CELERY_BROKER_URL = "redis://localhost:6379/0"
-CELERY_BEAT_SCHEDULE = {
-    "generate-monthly-reports": {
-        "task": "reports.tasks.generate_monthly_reports",
-        "schedule": crontab(day_of_month=1, hour=0, minute=0),  
-        # Runs every 1st day of the month at midnight
-    },
-}
+# CELERY_BROKER_URL = "redis://localhost:6379/0"
+# CELERY_BEAT_SCHEDULE = {
+#     "generate-monthly-reports": {
+#         "task": "reports.tasks.generate_monthly_reports",
+#         "schedule": crontab(day_of_month=1, hour=0, minute=0),  
+#         # Runs every 1st day of the month at midnight
+#     },
+# }
 
 
