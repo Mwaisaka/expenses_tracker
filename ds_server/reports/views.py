@@ -10,7 +10,7 @@ from django.db.models import Sum
 from .tasks import generate_monthly_reports
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from celery.result import AsyncResult
+# from celery.result import AsyncResult
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 
