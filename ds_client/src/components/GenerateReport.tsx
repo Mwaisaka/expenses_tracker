@@ -157,7 +157,7 @@ export default function GenerateReports() {
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg disabled:bg-gray-100"
                     >
                         {months.map((m) => (
-                            <option key={m.label} value={m.label}>
+                            <option key={m.value} value={m.value}>
                                 {m.label}
                             </option>
                         ))}
