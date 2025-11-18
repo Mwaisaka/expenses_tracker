@@ -4,6 +4,7 @@ import ExpenseList from "./ExpenseList";
 import AddExpense from "./AddExpense";
 import DashboardHome from "./DashboardHome";
 import Statement from "./Statement"
+import GenerateReports from "./GenerateReport";
 
 interface Expense {
   id: number;
@@ -33,8 +34,9 @@ export default function DashboardContent({
     return <AddExpense onExpenseAdded={onExpenseAdded} />;
   if (activeMenu === "Expenses List")
     return <ExpenseList expenses={expenses} onExpenseAdded={onExpenseAdded} />;
+  if (activeMenu === "generate_reports") return <GenerateReports />;
   if (activeMenu === "reports") return <Reports />;
-  if(activeMenu === "Expenses Statement") return <Statement />
+  if (activeMenu === "Expenses Statement") return <Statement />
 
   return null;
 }

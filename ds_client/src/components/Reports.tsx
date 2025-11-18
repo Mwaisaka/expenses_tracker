@@ -122,7 +122,7 @@ export default function ReportsDashboard() {
                 <tr key={r.id} className="border-t">
                   <td className="border p-1 text-center">{r.month}</td>
                   <td className="border p-1 text-center">{r.year}</td>
-                  <td className="border p-1 text-blue-600 font-semibold text-center">{Number(r.total_expenses).toLocaleString(undefined, {
+                  <td className="border p-1 font-semibold text-center">{Number(r.total_expenses).toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                   })}</td>
                   <td className="border p-1 text-center">{new Date(r.created_at).toLocaleString()}</td>
