@@ -34,7 +34,7 @@ export default function DashboardContent({
     return <AddExpense onExpenseAdded={onExpenseAdded} />;
   if (activeMenu === "Expenses List")
     return <ExpenseList expenses={expenses} onExpenseAdded={onExpenseAdded} />;
-  if (activeMenu === "generate_reports") return <GenerateReports />;
+  if (activeMenu === "Generate Reports") return <GenerateReports />;
   if (activeMenu === "reports") return <Reports />;
   if (activeMenu === "Expenses Statement") return <Statement />
 
