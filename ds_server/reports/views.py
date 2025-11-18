@@ -12,6 +12,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from celery.result import AsyncResult
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 
 import io
 from django.http import HttpResponse
@@ -43,7 +44,7 @@ class ReportListView(generics.ListAPIView):
         if period_type:
             queryset = queryset.filter(period_type=period_type)
             
-        return queryset
+        return queryset.order_by('-year', '-month', '-created_at', '-id')
     
 class ReportDetailView(generics.RetrieveAPIView):
     serializer_class = ReportSerializer
@@ -51,7 +52,8 @@ class ReportDetailView(generics.RetrieveAPIView):
     
     def get_queryset(self):
         return Report.objects.filter(user=self.request.user)
-
+        
+@csrf_exempt
 class GenerateReportView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     
@@ -107,12 +109,71 @@ class GenerateReportView(APIView):
         
         serializer = ReportSerializer(report)
         return Response(serializer.data, status = status.HTTP_201_CREATED if created else status.HTTP_200_OK)
+
+
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def generate_reports_now(request):
-    """Trigger Celery task manually"""
-    task = generate_monthly_reports.delay()
-    return Response({"message": "Report generation started","task_id": task.id}, status=status.HTTP_202_ACCEPTED)
+    
+    user = request.user
+    period_type = request.data.get("period_type", "Monthly")
+    year = int(request.data.get("year", datetime.now().year))
+    month = None
+
+    if period_type == "Monthly":
+        month_value = request.data.get("month")
+        if month_value:
+            month = int(month_value)
+        else:
+            month = datetime.now().month
+    
+    #Base query
+    expenses = Expense.objects.filter(user=user, date__year=year)
+    if month:
+        expenses = expenses.filter(date__month = month)
+    
+    #Aggregate totals by category
+    categories = [ 
+        "Food", "Transport", "Entertainment",
+        "Shopping", "Bills", "Others"
+        ]
+    
+    #initialize totals
+    totals = {cat: 0 for cat in categories}
+    
+    #use aggregation
+    grouped = expenses.values("category").annotate(total=Sum("amount"))
+    for g in grouped:
+        totals[g["category"]] = g["total"]
+    
+    total_expenses = sum(totals.values())
+    
+    #save or update report
+    report, created = Report.objects.update_or_create(
+        user = user,
+        period_type = period_type,
+        year = year, 
+        month = month,
+        defaults = {
+            "total_expenses": total_expenses,
+            "food_expenses": totals["Food"],
+            "transport_expenses": totals["Transport"],
+            "entertainment_expenses": totals["Entertainment"],
+            "shopping_expenses": totals["Shopping"],
+            "bills_expenses": totals["Bills"],
+            "others_expenses": totals["Others"],
+        }
+    )
+    
+    serializer = ReportSerializer(report)
+    return Response(serializer.data, status = status.HTTP_201_CREATED if created else status.HTTP_200_OK)
+
+# @api_view(["POST"])
+# @permission_classes([IsAuthenticated])
+# def generate_reports_now(request):
+#     """Trigger Celery task manually"""
+#     task = generate_monthly_reports.delay()
+#     return Response({"message": "Report generation started","task_id": task.id}, status=status.HTTP_202_ACCEPTED)
 
 @api_view(["GET"])
 def check_task_status(request, task_id):

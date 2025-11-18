@@ -68,7 +68,7 @@ export default function Sidebar({
           }`}
         >
           <List size={20} />
-          {sidebarOpen && <span>Expenses List</span>}
+          {sidebarOpen && <span>Manage Expenses</span>}
         </button>
 
         <button
