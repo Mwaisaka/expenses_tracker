@@ -1,24 +1,117 @@
-# Logs
-logs
+# ============================
+#  PYTHON / DJANGO
+# ============================
+
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
 *.log
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Environment variables
+.env
+*.env
+.env.*
+
+# Local Django database
+db.sqlite3
+
+# Django static and media
+media/
+staticfiles/
+
+# Testing / Coverage
+.coverage
+htmlcov/
+.coverage.*
+
+# ============================
+#  REACT / NODE / VITE / TAILWIND CSS
+# ============================
+
+# Node modules
+node_modules/
+
+# Vite build output
+dist/
+build/
+.vite/
+
+# Tailwind CSS build artifacts
+# Tailwind generates the final compiled CSS inside these:
+**/public/build/
+**/public/dist/
+**/static/css/*.css
+**/static/css/*.css.map
+
+# Tailwind JIT cache
+.tailwindcss/
+**/.tailwind-cache/
+**/tailwind-cache/
+
+# PostCSS cache
+.postcssrc
+.postcss-cache/
+**/.postcss-cache/
+
+# Debug logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
+# ============================
+#  IDE / EDITOR
+# ============================
+
+.vscode/
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
-*.sw?
+
+
+# ============================
+#  OS SPECIFIC
+# ============================
+
+# macOS
+.DS_Store
+
+# Linux
+*~
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+
+# ============================
+#  DOCKER / DEPLOYMENT
+# ============================
+
+docker-data/
+*.pid
+
+# Build caches
+__build__/
+*.bak
+
+
+# ============================
+#  MISC / TEMP FILES
+# ============================
+
+*.swp
+*.swo
+*.tmp
+*.temp
+*.cache/
+*.pyo
