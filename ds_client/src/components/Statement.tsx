@@ -8,7 +8,7 @@ export default function Statement() {
     const [jsonData, setJsonData] = useState<any | null>(null);
     const [loading, setLoading] = useState(false);
 
-    const API_URL = "http://127.0.0.1:8000"
+    // const API_URL = "http://127.0.0.1:8000"
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);

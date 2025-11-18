@@ -1,7 +1,7 @@
 import React from "react";
 import {
   LayoutDashboard,
-  PlusCircle,
+  // PlusCircle,
   List,
   PieChart,
   LogOut,

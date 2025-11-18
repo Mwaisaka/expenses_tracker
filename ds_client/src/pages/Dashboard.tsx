@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext.tsx";
 import Sidebar from "../components/Sidebar.tsx";
 import DashboardContent from "../components/DashboardContent.tsx";

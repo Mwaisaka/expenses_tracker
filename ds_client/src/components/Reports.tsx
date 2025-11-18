@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from "recharts";
 import StatementGenerator from "./Statement"; // the component we built earlier
 import { useAuth } from "../context/AuthContext";
@@ -22,7 +22,7 @@ export default function ReportsDashboard() {
   const [reports, setReports] = useState<Report[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const API_URL = "http://127.0.0.1:8000/reports/report_list/";
+  // const API_URL = "http://127.0.0.1:8000/reports/report_list/";
 
   //Fetch Reports
   const fetchReports = async () => {
@@ -72,7 +72,7 @@ export default function ReportsDashboard() {
           {latestReport ? (
             <PieChart width={400} height={300}>
               <Pie data={pieData} dataKey="value" cx="50%" cy="50%" outerRadius={100} label>
-                {pieData.map((entry, index) => (
+                {pieData.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
