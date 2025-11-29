@@ -30,7 +30,7 @@ Expenses Tracker App is an application designed to help one manage their income,
 
 ## Screenshots
 
-![Landing Page](./ds_client/public/Login-ExpensesTracker.PNG)
+![Landing Page](./ds_client/public/LandingPage.png)
 
 
 ## Installation
