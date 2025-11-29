@@ -5,6 +5,7 @@ import AddExpense from "./AddExpense";
 import DashboardHome from "./DashboardHome";
 import Statement from "./Statement"
 import GenerateReports from "./GenerateReport";
+import ExpenseTrends from "./ExpenseTrends"
 
 interface Expense {
   id: number;
@@ -30,6 +31,8 @@ export default function DashboardContent({
   // Render based on activeMenu
   if (activeMenu === "dashboard")
     return <DashboardHome expenses={expenses} total={total} />;
+  if (activeMenu === "Expense Trends")
+    return <ExpenseTrends />
   if (activeMenu === "add")
     return <AddExpense onExpenseAdded={onExpenseAdded} />;
   if (activeMenu === "Expenses List")

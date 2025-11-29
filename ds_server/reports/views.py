@@ -21,6 +21,7 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, 
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from openpyxl import Workbook
+from django.db.models.functions import TruncDay, TruncWeek, TruncMonth
 
 class ReportListView(generics.ListAPIView):
     serializer_class = ReportSerializer
@@ -317,5 +318,41 @@ def generate_statement(request):
         return response
 
     return Response({"error": "Invalid format. Use json, pdf, or excel."}, status=400)
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])    
+def expense_trends(request):
+    user = request.user
+    period = request.GET.get("period","daily") # daily| weekly | monthly
     
+    expenses = Expense.objects.filter(user=user)
     
+    data = []
+    
+    if period == "daily":
+        qs = (
+            expenses.annotate(day=TruncDay("date"))
+            .values("day")
+            .annotate(total=Sum("amount"))
+            .order_by("day")
+        )
+        data = [{"label": x["day"].strftime("%Y-%m-%d"), "total": x["total"]} for x in qs]
+    elif period == "weekly":
+        qs = (
+            expenses.annotate(week=TruncWeek("date"))
+            .values("week")
+            .annotate(total=Sum("amount"))
+            .order_by("week")
+        )
+        data = [{"label" : x["week"].strftime("%Y-%m-%d"), "total": x["total"]} for x in qs]
+    elif period == "monthly":
+        qs = (
+            expenses.annotate(month=TruncMonth("date"))
+            .values("month")
+            .annotate(total=Sum("amount"))
+            .order_by("month")
+        )
+        data = [{"label" : x["month"].strftime("%Y-%m-%d"), "total": x["total"]} for x in qs]
+    else:
+        return Response({"error": "Invalid period"}, status=400)
+    return Response(data, status=200)

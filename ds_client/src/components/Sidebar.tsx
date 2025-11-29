@@ -52,6 +52,16 @@ export default function Sidebar({
         </button>
 
         {/* <button
+          onClick={() => setActiveMenu("Expense Trends")}
+          className={`flex items-center gap-2 p-2 rounded w-full text-left ${
+            activeMenu === "Expense Trends" ? "bg-blue-600" : "hover:bg-blue-600"
+          }`}
+        >
+          <LayoutDashboard size={20} />
+          {sidebarOpen && <span>Trends</span>}
+        </button> */}
+
+        {/* <button
           onClick={() => setActiveMenu("add")}
           className={`flex items-center gap-2 p-2 rounded w-full text-left ${
             activeMenu === "add" ? "bg-blue-600" : "hover:bg-blue-600"

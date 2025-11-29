@@ -1,5 +1,6 @@
 // import React from "react";
 import Card from "./Card";
+import ExpenseTrends from "./ExpenseTrends";
 interface Expense {
   id: number;
   description: string;
@@ -68,6 +69,9 @@ export default function DashboardHome({ expenses, total }: DashboardHomeProps) {
             <li className="py-2 text-gray-500">No expenses found</li>
           )}
         </ul>
+      </div >
+      <div className="md:col-span-3 bg-white p-6 rounded-2xl shadow">
+        <ExpenseTrends />
       </div>
     </main>
   );
