@@ -9,6 +9,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,12 +40,20 @@ export default function Login() {
           <div>
             <label className="block text-sm font-medium">Password</label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-400"
             />
+            <div className="flex items-center gap-2 mt-1">
+              <input
+                type="checkbox"
+                checked={showPassword}
+                onChange={() => setShowPassword(!showPassword)}
+              />
+              <span className="text-sm">Show Password</span>
+            </div>
           </div>
           <button
             type="submit"
