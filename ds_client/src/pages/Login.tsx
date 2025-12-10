@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function Login() {
   const { login } = useAuth();
@@ -39,22 +40,33 @@ export default function Login() {
           </div>
           <div>
             <label className="block text-sm font-medium">Password</label>
-            <input
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-400"
-            />
-            <div className="flex items-center gap-2 mt-1">
+            <div className="relative">
               <input
-                type="checkbox"
-                checked={showPassword}
-                onChange={() => setShowPassword(!showPassword)}
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-400 pr-10"
               />
-              <span className="text-sm">Show Password</span>
+              {/* Toggle button inside input field */}
+              <button
+              type="button"
+              onClick={()=>setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+              >
+                {showPassword? <Eye size={20} /> : <EyeOff size={20} />}
+              </button>
+              {/* <div className="flex items-center gap-2 mt-1">
+                <input
+                  type="checkbox"
+                  checked={showPassword}
+                  onChange={() => setShowPassword(!showPassword)}
+                />
+                <span className="text-sm">Show Password</span>
+              </div> */}
             </div>
           </div>
+
           <button
             type="submit"
             className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
