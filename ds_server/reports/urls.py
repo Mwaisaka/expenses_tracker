@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ReportListView, ReportDetailView, generate_reports_now, check_task_status, ExpenseStatementView, generate_statement, GenerateReportView, expense_trends
+from .views import ReportListView, ReportDetailView, generate_reports_now, check_task_status, ExpenseStatementView, generate_statement, GenerateReportView, expense_trends, analytics_dashboard
 
 urlpatterns = [
     path('report_list/', ReportListView.as_view(), name="report_list"),
@@ -10,4 +10,5 @@ urlpatterns = [
     #  path("statement/", ExpenseStatementView.as_view(), name="expense-statement"),
     path("statement/", generate_statement, name="generate-statement"),
     path("trends/", expense_trends, name="expense_trends"),
+    path("analytics/", analytics_dashboard, name="analytics_dashboard"),
 ]

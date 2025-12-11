@@ -356,3 +356,57 @@ def expense_trends(request):
     else:
         return Response({"error": "Invalid period"}, status=400)
     return Response(data, status=200)
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def analytics_dashboard(request):
+    user = request.User
+    
+    expenses = Expense.objects.filter(user=user)
+    
+    #Total Expenses
+    total_expenses = expenses.aggregate(total=Sum("amount"))["total"] or 0
+    
+    #Category Breakdown
+    categories = (
+        expenses.values("category")
+        .annotate(total=Sum("amount"))
+        .order_by("-total")
+    )
+    biggest_category = categories[0]["category"] if categories else None
+    
+    #Daily Spending (Sparkline)
+    daily = (
+        expenses.annotate(day=TruncDay('date'))
+        .values("day")
+        .annotate(total=Sum("amount"))
+        .order_by("day")
+    )
+    daily_trend = [
+        {"label": x["day"].strftime("%Y-%m-%d"), "total": x["total"]} for x in daily
+    ]
+    
+    #Top Spending Days
+    top_days = sorted(daily_trend, key=lambda x: x["total"], reverse=True)[:5]
+    
+    #Monthly Summary 
+    monthly = (
+        expenses.annotate(month=TruncMonth("date"))
+        .values("month")
+        .annotate(total=Sum("amount"))
+        .order_by("month")
+    )
+    monthly_summary = [
+        {"label": x["month"].strftime("%Y-%m"), "total": x["total"]} for x in monthly
+    ]
+    
+    return Response({
+        "total_expenses": total_expenses,
+        "category_breakdown": categories,
+        "daily_trend": daily_trend,
+        "top_spending_days": top_days,
+        "biggest_category": biggest_category,
+        "monthly_summary": monthly_summary,
+    })
+    
+   
