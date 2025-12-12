@@ -39,7 +39,7 @@ export default function ExpenseTrends() {
     }, [period]);
 
     return (
-        <div className="p-6 bg-white shadow rounded-xl mt-6">
+        <div className="p-6 bg-white shadow rounded-xl mt-1">
             {/* Header */}
             <h2 className="text-xl font-semibold mb-5">Expense Trends</h2>
             <div className="flex justify-between items-center mb-4">

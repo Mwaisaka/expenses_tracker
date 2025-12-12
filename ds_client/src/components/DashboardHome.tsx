@@ -1,4 +1,5 @@
 // import React from "react";
+import AnalyticsDashboard from "./AnalyticsDashboard";
 import Card from "./Card";
 import ExpenseTrends from "./ExpenseTrends";
 interface Expense {
@@ -14,17 +15,20 @@ interface DashboardHomeProps {
   total: number;
 }
 
-export default function DashboardHome({ expenses, total }: DashboardHomeProps) {
+export default function DashboardHome({ expenses}: DashboardHomeProps) {
   return (
-    <main className="flex-1 max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-      <Card
+    <main className="flex-1 max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+      <div className="md:col-span-3 bg-white p-6 rounded-2xl shadow">
+        <AnalyticsDashboard />
+      </div>
+      {/* <Card
         title="Total Expenses"
         value={`Kes. ${total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
         color="text-blue-600"
-      />
+      /> */}
 
       <Card
-        title="This Month"
+        title="This Month's Expenses"
         value={`Kes. ${expenses
           .filter((e) => new Date(e.date).getMonth() === new Date().getMonth())
           .reduce((acc, exp) => acc + Number(exp.amount), 0)
@@ -32,7 +36,7 @@ export default function DashboardHome({ expenses, total }: DashboardHomeProps) {
         color="text-green-600"
       />
 
-      <Card
+      {/* <Card
         title="Top Category"
         value={
           expenses.length > 0
@@ -45,7 +49,7 @@ export default function DashboardHome({ expenses, total }: DashboardHomeProps) {
             : "N/A"
         }
         color="text-purple-600"
-      />
+      /> */}
 
       {/* Recent Expenses */}
       <div className="md:col-span-3 bg-white p-6 rounded-2xl shadow">
@@ -73,6 +77,7 @@ export default function DashboardHome({ expenses, total }: DashboardHomeProps) {
       <div className="md:col-span-3 bg-white p-6 rounded-2xl shadow">
         <ExpenseTrends />
       </div>
+      
     </main>
   );
 }

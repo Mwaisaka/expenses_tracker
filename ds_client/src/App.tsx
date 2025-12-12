@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 // import ResetPassword from "./pages/ResetPassword";
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
+import AnalyticsDashboard from "./components/AnalyticsDashboard.tsx";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           /> */}
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="/analytics" element={<AnalyticsDashboard />} />
           {/* <Route path="reset-password" element={<ResetPassword />} /> */}
         </Route>
       </Routes>

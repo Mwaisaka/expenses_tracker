@@ -360,7 +360,7 @@ def expense_trends(request):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def analytics_dashboard(request):
-    user = request.User
+    user = request.user
     
     expenses = Expense.objects.filter(user=user)
     
@@ -368,12 +368,12 @@ def analytics_dashboard(request):
     total_expenses = expenses.aggregate(total=Sum("amount"))["total"] or 0
     
     #Category Breakdown
-    categories = (
+    category_breakdown = (
         expenses.values("category")
         .annotate(total=Sum("amount"))
         .order_by("-total")
     )
-    biggest_category = categories[0]["category"] if categories else None
+    biggest_category = category_breakdown[0]["category"] if category_breakdown else None
     
     #Daily Spending (Sparkline)
     daily = (
@@ -402,7 +402,7 @@ def analytics_dashboard(request):
     
     return Response({
         "total_expenses": total_expenses,
-        "category_breakdown": categories,
+        "category_breakdown": category_breakdown,
         "daily_trend": daily_trend,
         "top_spending_days": top_days,
         "biggest_category": biggest_category,
