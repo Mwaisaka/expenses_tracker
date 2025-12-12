@@ -7,10 +7,11 @@ export default function AnalyticsDashboard() {
 
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const API_URL = import.meta.env.VITE_API_URL;
 
     const fetchAnalytics = async () => {
         try {
-            const res = await fetch("http://127.0.0.1:8000/reports/analytics/", {
+            const res = await fetch(`${API_URL}/reports/analytics/`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
