@@ -8,13 +8,14 @@ export default function ExpenseTrends() {
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<any[]>([]);
     const [period, setPeriod] = useState<"daily" | "weekly" | "monthly">("daily");
+    const API_URL = import.meta.env.VITE_API_URL;
 
     const fetchTrends = async () => {
         if (!token) return;
         setLoading(true);
 
         try {
-            const res = await fetch(`http://127.0.0.1:8000/reports/trends/?period=${period}`, {
+            const res = await fetch(`${API_URL}/reports/trends/?period=${period}`, {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${token}`,

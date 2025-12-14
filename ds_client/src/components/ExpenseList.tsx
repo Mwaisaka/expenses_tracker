@@ -23,6 +23,7 @@ export default function ExpenseList({
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [selectedMonth, setSelectedMonth] = useState<string>(""); // month filter
   const [selectedYear, setSelectedYear] = useState<string>(""); // year filter
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // Handle checkbox toggle
   const toggleSelect = (id: number) => {
@@ -75,7 +76,7 @@ export default function ExpenseList({
       try {
         for (const id of selectedIds) {
           const response = await fetch(
-            `http://127.0.0.1:8000/expense_detail/${id}/`,
+            `${API_URL}/expense_detail/${id}/`,
             {
               method: "DELETE",
               headers: {

@@ -21,6 +21,7 @@ export default function ReportsDashboard() {
   const { token } = useAuth();
   const [reports, setReports] = useState<Report[]>([]);
   const [loading, setLoading] = useState(false);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // const API_URL = "http://127.0.0.1:8000/reports/report_list/";
 
@@ -29,7 +30,7 @@ export default function ReportsDashboard() {
     if (!token) return;
     setLoading(true);
     try {
-      const res = await fetch("http://127.0.0.1:8000/reports/report_list/", {
+      const res = await fetch(`${API_URL}/reports/report_list/`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       if (!res.ok) throw new Error("Failed to fetch reports");

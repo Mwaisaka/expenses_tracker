@@ -18,10 +18,11 @@ export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeMenu, setActiveMenu] = useState("dashboard");
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const fetchExpenses = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/expenses_list/", {
+      const res = await fetch(`${API_URL}/expenses_list/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to fetch expenses");

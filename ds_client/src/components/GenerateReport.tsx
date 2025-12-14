@@ -21,6 +21,7 @@ export default function GenerateReports() {
     const [periodType, setPeriodType] = useState<"Monthly" | "Yearly">("Monthly");
     const [month, setMonth] = useState<number>(new Date().getMonth() + 1);
     const [year, setYear] = useState<number>(new Date().getFullYear());
+    const API_URL = import.meta.env.VITE_API_URL;
 
     //Generate current year +-5 years
     const currentYear = new Date().getFullYear();
@@ -46,7 +47,7 @@ export default function GenerateReports() {
         if (!token) return;
         setLoading(true);
         try {
-            const res = await fetch("http://127.0.0.1:8000/reports/report_list/", {
+            const res = await fetch(`${API_URL}/reports/report_list/`, {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -83,7 +84,7 @@ export default function GenerateReports() {
                 payload.month = month;
             }
 
-            const res = await fetch("http://127.0.0.1:8000/reports/generate/", {
+            const res = await fetch(`${API_URL}/reports/generate/`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`,

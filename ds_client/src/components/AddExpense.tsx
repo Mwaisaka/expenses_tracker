@@ -25,6 +25,7 @@ export default function AddExpense({
     "Bills",
     "Others",
   ];
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -40,7 +41,7 @@ export default function AddExpense({
         ...formData,
         amount: parseFloat(formData.amount), // convert to number
       };
-      const response = await fetch("http://127.0.0.1:8000/expenses_list/", {
+      const response = await fetch(`${API_URL}/expenses_list/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

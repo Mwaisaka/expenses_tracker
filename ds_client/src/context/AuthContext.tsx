@@ -29,6 +29,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // Load stored user and token on page reload
   useEffect(() => {
@@ -54,7 +55,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // 🔹 Login
   const login = async (username: string, password: string) => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/token/", {
+      const res = await fetch(`${API_URL}/api/token/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
@@ -67,7 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.log(data.access);
 
       // (Optional) Fetch user profile
-      const profileRes = await fetch("http://127.0.0.1:8000/profile/", {
+      const profileRes = await fetch(`${API_URL}/profile/`, {
         headers: { Authorization: `Bearer ${data.access}` },
       });
 
@@ -87,7 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     password: string
   ) => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/register/", {
+      const res = await fetch(`${API_URL}/api/register/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),
